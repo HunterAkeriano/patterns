@@ -1,45 +1,64 @@
-enum Car{
-    BMW = 1,
-    VAZ = 2,
-    ZAZ = 3
+interface FurnitureFactory {
+    createChair(): Chair;
+    createSofa(): Sofa;
 }
 
-
-
-class Creator{
-    static create(car:Car){
-        if(car === 1){
-            return new Bmw();
-        }else if(car === 2){
-            return new Vaz();
-        }
-        else if(car === 3){
-            return new Zaz();
-        }
+class VictorianFactory implements FurnitureFactory {
+    public createChair(): Chair {
+    return new VictorianChair();
+    }
+    public createSofa(): Sofa {
+    return new VictorianSofa();
     }
 }
 
-class Bmw{
-    name:string = 'BMW';
-    myName(){
-        return `Вы создали: ${this.name}`;
+class ModernFactory implements FurnitureFactory {
+    public createChair(): Chair {
+    return new ModernChair();
+    }
+    public createSofa(): Sofa {
+    return new ModernSofa();
     }
 }
 
+interface Chair {
+    ChairDesign(): string;
+}
 
-class Vaz{
-    name:string = 'Vaz';
-    myName(){
-        return `Вы создали: ${this.name}`;
+class VictorianChair implements Chair {
+    public ChairDesign(): string {
+        return 'victorian chair';
     }
 }
 
-class Zaz{
-    name:string = 'Zaz';
-    myName(){
-        return `Вы создали: ${this.name}`;
+class ModernChair implements Chair {
+    public ChairDesign(): string {
+        return 'modern chair';
     }
 }
 
-const autoCreator = Creator.create(2);
-console.log(autoCreator!.myName());
+interface Sofa {
+    SofaDesign(): string;
+}
+
+class VictorianSofa implements Sofa {
+    public SofaDesign(): string {
+        return 'victorian sofa';
+    }
+}
+
+class ModernSofa implements Sofa {
+    public SofaDesign(): string {
+        return 'modern sofa';
+    }
+}
+
+function clientCode(factory: FurnitureFactory) {
+    const chair = factory.createChair();
+    const sofa = factory.createSofa();
+
+    console.log(chair.ChairDesign());
+    console.log(sofa.SofaDesign());
+}
+
+clientCode(new VictorianFactory());
