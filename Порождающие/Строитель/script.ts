@@ -1,64 +1,75 @@
-interface FurnitureFactory {
-    createChair(): Chair;
-    createSofa(): Sofa;
+interface MyCar{
+    getAssembly():string,
+    addPowerCar(power:number):number,
+    addShiftCar(shift:string):string,
+    addModelCar(model:number):number,
+
 }
 
-class VictorianFactory implements FurnitureFactory {
-    public createChair(): Chair {
-    return new VictorianChair();
+
+
+class Fabrics{
+    private power!:number;
+    private model!: number;
+    private shift!: string;
+
+    public getPower(){
+        return this.power;
     }
-    public createSofa(): Sofa {
-    return new VictorianSofa();
+    public addPower(power:number):number{
+        return this.power = power;
     }
-}
-
-class ModernFactory implements FurnitureFactory {
-    public createChair(): Chair {
-    return new ModernChair();
+    public getModel(){
+        return  this.model;
     }
-    public createSofa(): Sofa {
-    return new ModernSofa();
+    public addModel(model:number):number{
+        return this.model = model;
     }
-}
-
-interface Chair {
-    ChairDesign(): string;
-}
-
-class VictorianChair implements Chair {
-    public ChairDesign(): string {
-        return 'victorian chair';
+    public getShift(){
+        return this.shift;
     }
-}
-
-class ModernChair implements Chair {
-    public ChairDesign(): string {
-        return 'modern chair';
+    public addShift(shift: string):string{
+        return this.shift = shift;
     }
-}
-
-interface Sofa {
-    SofaDesign(): string;
-}
-
-class VictorianSofa implements Sofa {
-    public SofaDesign(): string {
-        return 'victorian sofa';
+    assembly(){
+        return `Ваз модели: ${this.model}\n
+        Имеет мощность: ${this.power}\n
+        На ${this.shift} приводе`
     }
 }
 
-class ModernSofa implements Sofa {
-    public SofaDesign(): string {
-        return 'modern sofa';
+
+
+
+class AssemblyCar implements MyCar{
+    private car  = new Fabrics();
+    
+    getAssembly(): string {
+        return this.car.assembly();
+    }
+    addPowerCar(power: number): number {
+        return this.car.addPower(power);
+    }
+    addShiftCar(shift: string): string {
+        return this.car.addShift(shift);
+    }
+    addModelCar(model: number): number {
+        return this.car.addModel(model);
     }
 }
 
-function clientCode(factory: FurnitureFactory) {
-    const chair = factory.createChair();
-    const sofa = factory.createSofa();
-
-    console.log(chair.ChairDesign());
-    console.log(sofa.SofaDesign());
+class ResultCar{
+    static assembly(car: MyCar){
+        car.addModelCar(2101);
+        car.addPowerCar(80);
+        car.addShiftCar('Задний');
+        return car.getAssembly();
+    }
 }
 
-clientCode(new VictorianFactory());
+function cars(){
+    const assemb:AssemblyCar = new AssemblyCar();
+    const result = ResultCar.assembly(assemb);
+    console.log(result);
+}
+cars();
