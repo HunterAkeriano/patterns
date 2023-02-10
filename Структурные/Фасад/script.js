@@ -1,24 +1,39 @@
 "use strict";
-class FalsePresident {
-    constructor(falsy) {
-        this.falsy = falsy;
+// фасад
+// просто трактор который может изменять либо мощность либо цвет
+// через простое указание настроек ему
+class Tractor {
+    constructor(color, power) {
+        this.color = color || new Color();
+        this.power = power || new Power();
     }
-    addPresident(name) {
-        return this.falsy.addPresident(name).toLowerCase() + ' фальшивый президент';
+    addColor() {
+        let color = `Ваш новый цвет: ${this.color.addColor()}`;
+        return color;
+    }
+    addPower() {
+        let powers = `Ваша новая мощность: ${this.power.addPower()}`;
+        return powers;
     }
 }
-class Country {
-    constructor() {
-        this.president = 'Ваассаба';
+class Color {
+    returnColor() {
+        return `ваш цвет перекрашен в заводской`;
     }
-    addPresident(name) {
-        return `Новый президент: ${name}`;
+    addColor() {
+        return `Синий`;
     }
 }
-const niggeria = new Country();
-function ReturnPres(name, president) {
-    return president.addPresident(name);
+class Power {
+    returnPower() {
+        return `ваша мощность была возобновлена`;
+    }
+    addPower() {
+        return 450;
+    }
 }
-console.log(ReturnPres("Букашка", niggeria));
-const falsePresident = new FalsePresident(niggeria);
-console.log(ReturnPres("Дима", falsePresident));
+const color = new Color();
+const powers = new Power();
+const tractors = new Tractor(color, powers);
+console.log(tractors.addColor());
+console.log(tractors.addPower());

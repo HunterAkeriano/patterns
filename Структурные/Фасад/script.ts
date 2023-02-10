@@ -1,42 +1,45 @@
-interface Parlaments{
-   president?: string;
-   addPresident(name:string): string; 
-}
-
-
-// декоратор
-class FalsePresident implements Parlaments{
-   president?: string;
-   protected falsy: Parlaments;
-   constructor(falsy: Parlaments){
-      this.falsy = falsy;
+// фасад
+// просто трактор который может изменять либо мощность либо цвет
+// через простое указание настроек ему
+class Tractor{
+   private color: Color;
+   private power: Power;
+   constructor(color: Color, power: Power){
+      this.color = color || new Color();
+      this.power = power || new Power();
    }
-  public addPresident(name: string): string {
-      return this.falsy.addPresident(name).toLowerCase() + ' фальшивый президент';
-  }
+
+
+   public addColor( ){
+      let color = `Ваш новый цвет: ${this.color.addColor()}`;
+      return color;
+   }
+   public addPower(){
+      let powers = `Ваша новая мощность: ${this.power.addPower()}`
+      return powers;
+   }
 }
 
-
-// обычный класс
-class Country implements Parlaments{
-   president: string = 'Ваассаба';
-   addPresident(name: string): string {
-      return `Новый президент: ${name}`
-   } 
+class Color{
+   returnColor(){
+      return `ваш цвет перекрашен в заводской`
+   }
+   addColor(){
+      return `Синий`
+   }
+}
+class Power{
+   returnPower( ){
+      return `ваша мощность была возобновлена`
+   }
+   addPower(){
+      return 450;
+   }
 }
 
-// функция которая возвращает президента
-function ReturnPres(name:string, president:Parlaments){
-   return president.addPresident(name);
-}
+const color = new Color();
+const powers = new Power();
 
-
-const niggeria = new Country();
-
-console.log(ReturnPres("Букашка", niggeria));
-
-// фальсификация выборов
-const falsePresident = new FalsePresident(niggeria);
-console.log(ReturnPres("Дима", falsePresident))
-
-
+const tractors = new Tractor(color, powers);
+console.log(tractors.addColor());
+console.log(tractors.addPower());
