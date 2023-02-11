@@ -1,39 +1,51 @@
 "use strict";
-// фасад
-// просто трактор который может изменять либо мощность либо цвет
-// через простое указание настроек ему
+// Facde
 class Tractor {
-    constructor(color, power) {
-        this.color = color || new Color();
-        this.power = power || new Power();
+    constructor(startEngine, driveEngagement) {
+        this.startEngine = startEngine || new DriveEngagement();
+        this.driveEngagement = driveEngagement || new DriveEngagement();
     }
-    addColor() {
-        let color = `Ваш новый цвет: ${this.color.addColor()}`;
-        return color;
-    }
-    addPower() {
-        let powers = `Ваша новая мощность: ${this.power.addPower()}`;
-        return powers;
-    }
-}
-class Color {
-    returnColor() {
-        return `ваш цвет перекрашен в заводской`;
-    }
-    addColor() {
-        return `Синий`;
+    launch() {
+        let start = this.startEngine.start();
+        let fuel = this.startEngine.fuel();
+        let turns = this.startEngine.turns();
+        let engagement = this.driveEngagement.included();
+        let result = `Двигатель: ${start}\n
+      Подача топлива: ${fuel}\n
+      Обороты двигателя на данный момент: ${turns}\n
+      Передний привод: ${engagement}`;
+        return result;
     }
 }
-class Power {
-    returnPower() {
-        return `ваша мощность была возобновлена`;
+class StartEngine {
+    constructor() {
+        this.engine = "Заглушенный";
+        this.fuels = 'Нет подачи';
+        this.turn = 0;
     }
-    addPower() {
-        return 450;
+    start() {
+        this.engine = 'Запущенный';
+        return this.engine;
+    }
+    fuel() {
+        this.fuels = 'Подача есть';
+        return this.fuels;
+    }
+    turns() {
+        this.turn = 1200;
+        return this.turn;
     }
 }
-const color = new Color();
-const powers = new Power();
-const tractors = new Tractor(color, powers);
-console.log(tractors.addColor());
-console.log(tractors.addPower());
+class DriveEngagement {
+    constructor() {
+        this.engagement = 'Выключенный';
+    }
+    included() {
+        this.engagement = 'Включенный';
+        return this.engagement;
+    }
+}
+let startEngine = new StartEngine();
+let engagements = new DriveEngagement();
+let tractor = new Tractor(startEngine, engagements);
+console.log(tractor.launch());
