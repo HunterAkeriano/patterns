@@ -77,24 +77,20 @@ const textEditor = new TextEditor();
 
 textEditor.changeText('МТЗ 820');
 textEditor.changeText('ЮМЗ');
-
-
 console.log(textEditor.getText());
-
 console.log('\n2 раза отменить\n');
-
 textEditor.undo();
 textEditor.undo();
 
 console.log(textEditor.getText());
 
-console.log('\nповторить\n');
+console.log('повторить');
 
 textEditor.undo();
 
 console.log(textEditor.getText());
 
-console.log('\nповторить\n');
+console.log('повторить');
 
 textEditor.redo();
 
