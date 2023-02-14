@@ -5,13 +5,21 @@ interface Parlaments{
 
 
 // декоратор
-class FalsePresident implements Parlaments{
+abstract class BaseDecorator implements Parlaments{
    president?: string;
    protected falsy: Parlaments;
    constructor(falsy: Parlaments){
       this.falsy = falsy;
    }
   public addPresident(name: string): string {
+      return this.falsy.addPresident(name).toLowerCase();
+  }
+}
+
+class FalsePresident extends BaseDecorator{
+   president?: string;
+   protected falsy: Parlaments;
+   public addPresident(name: string): string {
       return this.falsy.addPresident(name).toLowerCase() + ' фальшивый президент';
   }
 }
