@@ -1,63 +1,46 @@
-interface NewsObserver {
-		update(subject: Parlament): void;
+interface Context {
+	changeState(state: State): void;
+	paints(): void;
 }
-class Parlament {
-	private mailingSystems: NewsObserver[] = [];
-	public news: string[] = [];
-	constructor(public name: string) {}
-	attach(mailingSystem: NewsObserver): this {
-		this.mailingSystems.push(mailingSystem);
-		return this;
+abstract class State {
+	protected state?: State;
+	setNextState(state: State): State {
+		this.state = state;
+
+		return this.state;
 	}
-	detach(mailingSystem: NewsObserver): this {
-		this.mailingSystems = this.mailingSystems.filter((ms) => ms !== mailingSystem);
-		return this;
+	nextState(): State | undefined {
+		return this.state;
 	}
-	notify(): void {
-		this.mailingSystems.forEach((ms) => ms.update(this));
-	}
-	writeLatestNews(news: string[]) {
-		news.forEach((n) => this.news.push(n));
-		this.notify();
-		this.news.length = 0;
-	}
+	abstract paints(): void;
 }
 
-//  конкретный наблюдатель за субъектом
+class ColorTractor implements Context {
+	constructor(private state?: State) {}
+	paints(): void {
+		if (this.state) {
+			this.state.paints();
+			this.state = this.state.nextState();
+		} else {
+			console.log('Трактор в заводской красске');
+		}
+	}
 
-class EmailSpam implements NewsObserver {
-	update(parlament: Parlament): void {
-		console.log(`Отправлено на почту: ${parlament.name}`, {
-			data: parlament.news,
-		});
+	changeState(state: State): void {
+		this.state = state;
+	}
+}
+class Red extends State {
+	override paints(): void {
+		console.log('Трактор окрашен в красный');
+	}
+}
+class Blue extends State {
+	override paints(): void {
+		console.log('Трактор окрашен в синий');
 	}
 }
 
-class TV implements NewsObserver {
-	update(parlament: Parlament): void {
-		console.log(`Отправлено на ${parlament.name} телеканал`, {
-			data: parlament.news,
-		});
-	}
-}
-
-// создание конкретных субъектов
-
-const GMAIL = new Parlament('Уганда');
-const CNN = new Parlament('ЮАР');
-
-
-// привязка наблюдателей к субъектам
-
-GMAIL.attach(new EmailSpam());
-CNN.attach(new TV());
-
-GMAIL.writeLatestNews([
-	'В Зимбабве переворот',
-	'Поставка оружия через порты закрыта',
-]);
-
-CNN.writeLatestNews([
-	'В Африке обнаружены 20 источников пресной воды',
-	'Смертность от КОВИД уменьшилась в 50 раз',
-]);
+// передаю в обьект изменение цвета
+const colorTractor = new ColorTractor( new Blue());
+colorTractor.paints();

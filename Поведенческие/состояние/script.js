@@ -1,53 +1,40 @@
 "use strict";
-class Parlament {
-    constructor(name) {
-        this.name = name;
-        this.mailingSystems = [];
-        this.news = [];
+class State {
+    setNextState(state) {
+        this.state = state;
+        return this.state;
     }
-    attach(mailingSystem) {
-        this.mailingSystems.push(mailingSystem);
-        return this;
-    }
-    detach(mailingSystem) {
-        this.mailingSystems = this.mailingSystems.filter((ms) => ms !== mailingSystem);
-        return this;
-    }
-    notify() {
-        this.mailingSystems.forEach((ms) => ms.update(this));
-    }
-    writeLatestNews(news) {
-        news.forEach((n) => this.news.push(n));
-        this.notify();
-        this.news.length = 0;
+    nextState() {
+        return this.state;
     }
 }
-//  конкретный наблюдатель за субъектом
-class EmailSpam {
-    update(parlament) {
-        console.log(`Отправлено на почту: ${parlament.name}`, {
-            data: parlament.news,
-        });
+class ColorTractor {
+    constructor(state) {
+        this.state = state;
+    }
+    paints() {
+        if (this.state) {
+            this.state.paints();
+            this.state = this.state.nextState();
+        }
+        else {
+            console.log('Трактор в заводской красске');
+        }
+    }
+    changeState(state) {
+        this.state = state;
     }
 }
-class TV {
-    update(parlament) {
-        console.log(`Отправлено на ${parlament.name} телеканал`, {
-            data: parlament.news,
-        });
+class Red extends State {
+    paints() {
+        console.log('Трактор окрашен в красный');
     }
 }
-// создание конкретных субъектов
-const GMAIL = new Parlament('Уганда');
-const CNN = new Parlament('ЮАР');
-// привязка наблюдателей к субъектам
-GMAIL.attach(new EmailSpam());
-CNN.attach(new TV());
-GMAIL.writeLatestNews([
-    'В Зимбабве переворот',
-    'Поставка оружия через порты закрыта',
-]);
-CNN.writeLatestNews([
-    'В Африке обнаружены 20 источников пресной воды',
-    'Смертность от КОВИД уменьшилась в 50 раз',
-]);
+class Blue extends State {
+    paints() {
+        console.log('Трактор окрашен в синий');
+    }
+}
+// const state = new DarkMode();
+const colorTractor = new ColorTractor(new Blue());
+colorTractor.paints();
